@@ -1,0 +1,26 @@
+networks:
+  ol:
+  my_proxy_network:
+    external: true
+
+services:
+  frontend-ol:
+    build:
+      context: ./frontend
+    container_name: frontend-ol
+    networks:
+      - ol
+
+  nginx-ol:
+    container_name: nginx-ol
+    restart: always
+    image: nginx:stable-alpine
+    expose:
+      - "80"
+    volumes:
+      - './nginx.conf:/etc/nginx/nginx.conf'
+    depends_on:
+      - frontend-ol
+    networks:
+      - ol
+      - my_proxy_network
